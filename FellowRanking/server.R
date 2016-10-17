@@ -65,7 +65,6 @@ shinyServer(function(input, output,session) {
     
     inputdata <- inputDataReactive()
     print("analyzing data")
-    validate(need(name_of_fellow_column%in%colnames(inputdata),"Select Column Names"))
     
     rank_fellow_data(inputdata,
                      name_of_fellow_column = input$choice_fellowname,
