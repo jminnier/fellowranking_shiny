@@ -3,8 +3,9 @@ library(tidyverse)
 library(zoo)
 library(tools)
 library(markdown)
-library(plotly)
+#library(plotly)
 library(readxl)
+library(ggvis)
 
 print(sessionInfo())
 
