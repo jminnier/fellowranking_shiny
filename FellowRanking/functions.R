@@ -58,20 +58,21 @@ rank_fellow_data <- function(dat,
   tmp <- dat_i%>%mutate("Score_Inorm_median"= (Score-medianS_i)/madS_i,
                         "Score_Inorm_mean"= (Score-meanS_i)/sdS_i
   )%>%group_by(FellowName)%>%summarise(
-    "medianS_Inorm"=median(Score_Inorm_median),
-    "meanS_Inorm"=mean(Score_Inorm_mean),
-    "meanR_i"=mean(rankI),"medianR_i"=median(rankI))
+    "medianS_Inorm"=median(Score_Inorm_median,na.rm=T),
+    "meanS_Inorm"=mean(Score_Inorm_mean,na.rm=T),
+    "meanR_i"=mean(rankI,na.rm=T),"medianR_i"=median(rankI,na.rm=T))
   dat_fellow <- left_join(dat_fellow,tmp)
   dat_fellow$rank_medianSI <- rank(-1*dat_fellow$medianS_Inorm)
   dat_fellow$rank_meanSI <- rank(-1*dat_fellow$meanS_Inorm)
   dat_fellow$rank_meanRI <- rank(dat_fellow$meanR_i)
   dat_fellow$rank_medianRI <- rank(dat_fellow$medianR_i)
   
-  # dat_fellow$rank_sum <- with(dat_fellow,rank_medianS+rank_meanS+rank_medianSI+rank_meanSI+rank_meanRI+rank_medianRI)
+  dat_fellow$rank_sum_final <- with(dat_fellow,
+                                    rank_medianS+rank_meanS+rank_medianSI+rank_meanSI+rank_meanRI+rank_medianRI)
   # dat_fellow$rank_sum_med <- with(dat_fellow,rank_medianS+rank_medianSI+rank_medianRI)
   # dat_fellow$rank_sum_mean <- with(dat_fellow,rank_meanS+rank_meanSI+rank_meanRI)
   # dat_fellow$rank_sum1 <- with(dat_fellow,rank_medianS+rank_medianSI)
-  dat_fellow$rank_sum_final <- with(dat_fellow,rank_medianS+rank_meanS+rank_medianSI+rank_medianRI)
+  # dat_fellow$rank_sum_final <- with(dat_fellow,rank_medianS+rank_meanS+rank_medianSI+rank_medianRI)
   
   dat_fellow <- dat_fellow%>%mutate("order_final"=rank(rank_sum_final))
   
@@ -80,10 +81,12 @@ rank_fellow_data <- function(dat,
   
   df_final<- df_final%>%rename(
     SUM_ranks=rank_sum_final,
-    rank_meanS = rank_meanS,
-    rank_medS = rank_medianS,
+    mean_Score = meanS,
+    median_Score = medianS,
+    rank_meanScore = rank_meanS,
+    rank_medScore = rank_medianS,
     rank_Inorm_median = rank_medianSI,
-    #rank_Inorm_mean = rank_meanSI,
+    #rank_Inorm_mean = rank_meanSI, #did not use this
     rank_Irank = rank_medianRI
     )%>%arrange(SUM_ranks)
   df_final

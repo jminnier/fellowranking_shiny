@@ -13,8 +13,9 @@ We examine the following three score systems:
 ($\ sI_{ir} = (s_{ir} - mean(sI_{i\cdot}))/sd(sI_{i\cdot})$ or the median normalized version $\ sI_{ir} = (s_{ir} - median(sI_{i\cdot}))/MAD(sI_{i\cdot})$)
 - score_Irank: Calculate the interviewer-specific rank of a candidate relative to other candidates that the interviewer scored, but normalize the ranks so that all the ranks are on the same scale of 0 to 1 regardless of the number of candidates each faculty member scored ($\ sIrank_{ir}= rank(s_{ir})/max(rank(s_{\cdot r}))$)
 
-We then take the mean and median of each of these scores across the interviewers and rank each candidate by these scores. We can then sum up a combination of these ranks and use this as the final ordering of candidates. I chose to sum the four ranks based on (1) the mean raw score, (2) the median raw score, and the medians of (3) normalized interviewer scores (score_Inorm) and (4) normalized interviewer ranks (score_Irank).
+We then take the mean and median of each of these scores across the interviewers and rank each candidate by these scores. We can then sum up a combination of these ranks and use this as the final ordering of candidates. I chose to sum the six ranks based on (1) the mean raw score, (2) the median raw score, and the means and medians of (3) normalized interviewer scores (score_Inorm) and (4) normalized interviewer ranks (score_Irank).
 
 **The fellow's final ranking is determined by the `SUM_ranks` column.**
 
 Some candidates who would be ranked high based on mean or median raw score alone may have lower summed scores their scores were actually low in comparison to the other candidates that certain interviewers scored. This will remove the artifact that faculty who ranked these candidates highly were also ranking other people highly in general. By adding together these four rankings, specific skewness or bias based on the distribution or the number of interviewer scores does not influence the order of the candidates too strongly.
+
