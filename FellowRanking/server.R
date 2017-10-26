@@ -16,8 +16,16 @@ shinyServer(function(input, output,session) {
       updateSelectInput(session,"choice_interviewer",choices =tmpcols, selected = tmpcols[2])
       updateSelectInput(session,"choice_score",choices =tmpcols, selected = tmpcols[3])
     }
-    
   })
+  
+  
+  observe({
+    mydata = analyzeDataReactive()
+    tmpcols2 = colnames(mydata)
+    updateSelectInput(session,"choice_xaxis",choices=tmpcols2, selected=tmpcols2[1])
+    updateSelectInput(session,"choice_yaxis",choices=tmpcols2, selected=tmpcols2[2])
+  })
+  
   
   inputDataReactive <- reactive({
     
@@ -112,6 +120,12 @@ shinyServer(function(input, output,session) {
   
   observe({
     mydata = analyzeDataReactive()
+    
+    validate(
+      need((input$choice_yaxis!="")&(input$choice_xaxis!=""),
+           message = "Please select columns")
+    )
+    
     scatterplot_fun_ggvis(mydata,myx=input$choice_xaxis,myy=input$choice_yaxis)%>%bind_shiny("ggvis", "ggvis_ui")
   })
 

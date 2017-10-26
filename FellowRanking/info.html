@@ -127,15 +127,9 @@ $(document).ready(function () {
 <li>score_Inorm: Normalize each interviewer’s set of scores and measure how much above or below the individual candidate’s score is relative to the set of candidates that the interviewer scored. This brings all interviewers’ scores to the same mean and standard deviation (<span class="math inline">\(\ sI_{ir} = (s_{ir} - mean(sI_{i\cdot}))/sd(sI_{i\cdot})\)</span> or the median normalized version <span class="math inline">\(\ sI_{ir} = (s_{ir} - median(sI_{i\cdot}))/MAD(sI_{i\cdot})\)</span>)</li>
 <li>score_Irank: Calculate the interviewer-specific rank of a candidate relative to other candidates that the interviewer scored, but normalize the ranks so that all the ranks are on the same scale of 0 to 1 regardless of the number of candidates each faculty member scored (<span class="math inline">\(\ sIrank_{ir}= rank(s_{ir})/max(rank(s_{\cdot r}))\)</span>)</li>
 </ul>
-<p>We then take the mean and median of each of these scores across the interviewers and rank each candidate by these scores. We can then sum up a combination of these ranks and use this as the final ordering of candidates. I chose to sum the four ranks based on (1) the mean raw score, (2) the median raw score, and the medians of (3) normalized interviewer scores (score_Inorm) and (4) normalized interviewer ranks (score_Irank).</p>
+<p>We then take the mean and median of each of these scores across the interviewers and rank each candidate by these scores. We can then sum up a combination of these ranks and use this as the final ordering of candidates. I chose to sum the six ranks based on (1) the mean raw score, (2) the median raw score, and the means and medians of (3) normalized interviewer scores (score_Inorm) and (4) normalized interviewer ranks (score_Irank).</p>
 <p><strong>The fellow’s final ranking is determined by the <code>SUM_ranks</code> column.</strong></p>
 <p>Some candidates who would be ranked high based on mean or median raw score alone may have lower summed scores their scores were actually low in comparison to the other candidates that certain interviewers scored. This will remove the artifact that faculty who ranked these candidates highly were also ranking other people highly in general. By adding together these four rankings, specific skewness or bias based on the distribution or the number of interviewer scores does not influence the order of the candidates too strongly.</p>
-</div>
-<div id="references" class="section level1">
-<h1>References</h1>
-<ul>
-<li>Example data was generated with the <a href="http://cran.r-project.org/package=babynames">babynames</a> dataset in R.</li>
-</ul>
 </div>
 
 

@@ -110,7 +110,7 @@ scatterplot_fun_ggvis <- function(mydata,myx,myy) {
   all_values <- function(x) {
     if(is.null(x)) return(NULL)
     row <- mydata[mydata$id == x$id, ]
-    paste0(names(row), ": ", format(row), collapse = "<br />")
+    paste0(names(row), ": ", row, collapse = "<br />")
     
   }
   mydata%>%ggvis(~xaxis,~yaxis,fill=~SUM_ranks,key:=~id)%>%layer_points()%>%

@@ -38,11 +38,9 @@ navbarPage(   title="Fellow Ranking",id="maintabset",
                          sidebarPanel(
                            p("Visualize the data. Hover your mouse over points to see the average rank data."),
                            selectInput("choice_xaxis",label="Select the X axis value.",
-                                       choices=c("order_final","meanS","medianS","SUM_ranks","rank_meanS","rank_medS","rank_Inorm_median"),
-                                       selected = "meanS"),
+                                       choices=c()),
                            selectInput("choice_yaxis",label="Select the Y axis value.",
-                                       choices=c("order_final","meanS","medianS","SUM_ranks","rank_meanS","rank_medS","rank_Inorm_median"),
-                                       selected="rank_Inorm_median")
+                                       choices=c())
                          ),
                          mainPanel(
                            #plotlyOutput("myscatter_interactive",height="600px")
