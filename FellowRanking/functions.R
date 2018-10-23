@@ -9,6 +9,8 @@ library(ggvis)
 
 print(sessionInfo())
 
+myrank <- function(x) rank(x,na.last=TRUE,ties.method = "min")
+
 clean_data <- function(dat) {
   dat$FellowName = na.locf(dat$FellowName) # last observation carried forward
   dat = dat%>%filter(!is.na(Interviewer),!is.na(Score))
@@ -33,15 +35,15 @@ rank_fellow_data <- function(dat,
     summarise("meanS"=mean(Score),"medianS"=median(Score))%>%arrange(-1*medianS)
   
   #Raw ranking
-  dat_fellow$rank_medianS <- rank(-1*dat_fellow$medianS)
-  dat_fellow$rank_meanS <- rank(-1*dat_fellow$meanS)
+  dat_fellow$rank_medianS <- myrank(-1*dat_fellow$medianS)
+  dat_fellow$rank_meanS <- myrank(-1*dat_fellow$meanS)
   
   
   #Normalized interviewer rank
   dat_irank <- data.frame()
   for(ii in levels(factor(dat$Interviewer))) {
     tmp <- dat%>%filter(Interviewer==ii)
-    tmp <- tmp%>%mutate("rankI"=(rank(-1*Score)-min(rank(-1*Score)))/(max(rank(-1*Score)-min(rank(-1*Score)))))
+    tmp <- tmp%>%mutate("rankI"=(myrank(-1*Score)-min(myrank(-1*Score)))/(max(myrank(-1*Score)-min(myrank(-1*Score)))))
     dat_irank <- rbind(dat_irank,tmp)  
   }
   dat <- left_join(dat,dat_irank)
@@ -62,10 +64,10 @@ rank_fellow_data <- function(dat,
     "meanS_Inorm"=mean(Score_Inorm_mean,na.rm=T),
     "meanR_i"=mean(rankI,na.rm=T),"medianR_i"=median(rankI,na.rm=T))
   dat_fellow <- left_join(dat_fellow,tmp)
-  dat_fellow$rank_medianSI <- rank(-1*dat_fellow$medianS_Inorm)
-  dat_fellow$rank_meanSI <- rank(-1*dat_fellow$meanS_Inorm)
-  dat_fellow$rank_meanRI <- rank(dat_fellow$meanR_i)
-  dat_fellow$rank_medianRI <- rank(dat_fellow$medianR_i)
+  dat_fellow$rank_medianSI <- myrank(-1*dat_fellow$medianS_Inorm)
+  dat_fellow$rank_meanSI <- myrank(-1*dat_fellow$meanS_Inorm)
+  dat_fellow$rank_meanRI <- myrank(dat_fellow$meanR_i)
+  dat_fellow$rank_medianRI <- myrank(dat_fellow$medianR_i)
   
   dat_fellow$rank_sum_final <- with(dat_fellow,
                                     rank_medianS+rank_meanS+rank_medianSI+rank_meanSI+rank_meanRI+rank_medianRI)
@@ -74,7 +76,7 @@ rank_fellow_data <- function(dat,
   # dat_fellow$rank_sum1 <- with(dat_fellow,rank_medianS+rank_medianSI)
   # dat_fellow$rank_sum_final <- with(dat_fellow,rank_medianS+rank_meanS+rank_medianSI+rank_medianRI)
   
-  dat_fellow <- dat_fellow%>%mutate("order_final"=rank(rank_sum_final))
+  dat_fellow <- dat_fellow%>%mutate("order_final"=myrank(rank_sum_final))
   
   df_final <- dat_fellow[,c("FellowName","order_final","rank_sum_final","meanS","medianS","rank_meanS","rank_medianS",
                             "rank_medianSI","rank_medianRI")]
